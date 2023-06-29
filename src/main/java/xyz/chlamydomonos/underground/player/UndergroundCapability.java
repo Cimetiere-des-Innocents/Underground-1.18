@@ -26,10 +26,9 @@ public class UndergroundCapability implements IUndergroundCapability
         this.player = player;
         this.gv = gv;
         this.inPunishment = false;
-        var worldRule = WorldRule.getInstance(player.level);
-        gvRule = worldRule.getGvRule();
-        wealthRule = worldRule.getWealthRule();
-        punishment = worldRule.getPunishment();
+        gvRule = null;
+        wealthRule = null;
+        punishment = null;
     }
 
     @Override
@@ -53,25 +52,25 @@ public class UndergroundCapability implements IUndergroundCapability
     @Override
     public void updateGV(int lightLevel)
     {
-        gv = gvRule.getNewValue(gv, player, lightLevel);
+        gv = getGVRule().getNewValue(gv, player, lightLevel);
     }
 
     @Override
     public long calculateWealth(int lightLevel)
     {
-        return wealthRule.calculate(player, lightLevel);
+        return getWealthRule().calculate(player, lightLevel);
     }
 
     @Override
     public void applyPunishment(int lightLevel)
     {
-        punishment.apply(player, lightLevel);
+        getPunishment().apply(player, lightLevel);
     }
 
     @Override
     public void stopPunishment()
     {
-        punishment.stop(player);
+        getPunishment().stop(player);
     }
 
     @Override
@@ -89,7 +88,10 @@ public class UndergroundCapability implements IUndergroundCapability
     @Override
     public GVRule getGVRule()
     {
-        return gvRule;
+        if(gvRule != null)
+            return gvRule;
+        var worldRule = WorldRule.getInstance(player.level);
+        return worldRule.getGvRule();
     }
 
     @Override
@@ -101,7 +103,10 @@ public class UndergroundCapability implements IUndergroundCapability
     @Override
     public WealthRule getWealthRule()
     {
-        return wealthRule;
+        if(wealthRule != null)
+            return wealthRule;
+        var worldRule = WorldRule.getInstance(player.level);
+        return worldRule.getWealthRule();
     }
 
     @Override
@@ -113,7 +118,10 @@ public class UndergroundCapability implements IUndergroundCapability
     @Override
     public Punishment getPunishment()
     {
-        return punishment;
+        if(punishment != null)
+            return punishment;
+        var worldRule = WorldRule.getInstance(player.level);
+        return worldRule.getPunishment();
     }
 
     @Override
@@ -128,9 +136,15 @@ public class UndergroundCapability implements IUndergroundCapability
         CompoundTag tag = new CompoundTag();
         tag.putInt("gv", gv);
         tag.putBoolean("in_punishment", inPunishment);
-        tag.putString("gv_rule", Objects.requireNonNull(gvRule.getRegistryName()).toString());
-        tag.putString("wealth_rule", Objects.requireNonNull(wealthRule.getRegistryName()).toString());
-        tag.putString("punishment", Objects.requireNonNull(punishment.getRegistryName()).toString());
+
+        if(gvRule != null)
+            tag.putString("gv_rule", Objects.requireNonNull(gvRule.getRegistryName()).toString());
+
+        if(wealthRule != null)
+            tag.putString("wealth_rule", Objects.requireNonNull(wealthRule.getRegistryName()).toString());
+
+        if(punishment != null)
+            tag.putString("punishment", Objects.requireNonNull(punishment.getRegistryName()).toString());
         return tag;
     }
 
@@ -139,8 +153,14 @@ public class UndergroundCapability implements IUndergroundCapability
     {
         gv = nbt.getInt("gv");
         inPunishment = nbt.getBoolean("in_punishment");
-        gvRule = RegistryLoader.GV_RULE.get().getValue(ResourceLocation.tryParse(nbt.getString("gv_rule")));
-        wealthRule = RegistryLoader.WEALTH_RULE.get().getValue(ResourceLocation.tryParse(nbt.getString("wealth_rule")));
-        punishment = RegistryLoader.PUNISHMENT.get().getValue(ResourceLocation.tryParse(nbt.getString("punishment")));
+
+        if(nbt.contains("gv_rule"))
+            gvRule = RegistryLoader.GV_RULE.get().getValue(ResourceLocation.tryParse(nbt.getString("gv_rule")));
+
+        if(nbt.contains("wealth_rule"))
+            wealthRule = RegistryLoader.WEALTH_RULE.get().getValue(ResourceLocation.tryParse(nbt.getString("wealth_rule")));
+
+        if(nbt.contains("punishment"))
+            punishment = RegistryLoader.PUNISHMENT.get().getValue(ResourceLocation.tryParse(nbt.getString("punishment")));
     }
 }

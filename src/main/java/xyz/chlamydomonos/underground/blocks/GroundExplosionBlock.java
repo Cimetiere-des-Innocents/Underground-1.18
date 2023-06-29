@@ -136,7 +136,7 @@ public class GroundExplosionBlock extends Block implements EntityBlock
         tileEntity.setExploding(false);
         tileEntity.setPlayer(player);
         tileEntity.setBlocksToCreate(blocksToCreate);
-        tileEntity.setCountDown(20);
+        tileEntity.setCountDown(60);
 
         level.scheduleTick(pos, this, 2, TickPriority.EXTREMELY_HIGH);
     }

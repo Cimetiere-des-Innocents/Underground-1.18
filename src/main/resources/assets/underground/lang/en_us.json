@@ -3,6 +3,6 @@
   "death.attack.on_ground.player": "%1$s Died because of %2$s being on the ground",
   "command.underground.gv_rule.not_found": "GV rule %1$s does not exist",
   "command.underground.gv_rule.success": "GV rule set to %1$s",
-  "message.underground.gv": "Warning, your GV is %1$d, if your GV drops to 0, you will die",
+  "message.underground.gv": "Warning, your GV is %1$d, if your GV drops to 0, you will suffer",
   "command.underground.gv_rule.get": "Current GV rule is %1$s"
 }
