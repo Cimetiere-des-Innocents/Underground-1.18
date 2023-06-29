@@ -1,0 +1,8 @@
+{
+  "death.attack.on_ground": "%1$s因为处于地面，被天罚杀死了",
+  "death.attack.on_ground.player": "%1$s因为%2$s处于地面，被天罚误杀了",
+  "command.underground.gv_rule.not_found": "GV规则%1$s不存在",
+  "command.underground.gv_rule.success": "GV规则已设置为%1$s",
+  "message.underground.gv": "警告，你的GV仅剩%1$d，如果你的GV为0，你将会被天罚杀死",
+  "command.underground.gv_rule.get": "当前GV规则为%1$s"
+}
